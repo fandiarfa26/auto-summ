@@ -11,8 +11,7 @@ def index():
     if form.validate_on_submit():
         s1 = form.sentence1.data
         result = process(s1)
-        print(result)
-        flash('OK')
+        flash(result)
         return redirect(url_for('index'))
     return render_template('index.html', form=form)
 

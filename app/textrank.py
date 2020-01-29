@@ -14,9 +14,14 @@ def textrank(sentences, top_n, stopwords=None):
 
     # mengurutkan ranking kalimat
     ranked_sentence_indexes = [item[0] for item in sorted(enumerate(sentence_ranking), key=lambda item: -item[1])]
+    print("\nRANKED SENTENCE INDEXES")
+    print(ranked_sentence_indexes)
+
     selected_sentences = sorted(ranked_sentence_indexes[:top_n])
-    summary = itemgetter(*selected_sentences)(sentences)
-    return summary
+    print("\nSELECTED SENTENCES")
+    print(selected_sentences)
+
+    return selected_sentences
 
 
 def pagerank(matrix, eps=0.0001, d=0.85):
@@ -96,18 +101,19 @@ def process(req):
 
     # sentence splitting
     st = sent_tokenize(req)
-    #print("\nSENTENCE SPLITTING")
-    #print(st)
+    # print("\nSENTENCE SPLITTING")
+    # print(st)
 
     arr = [word_tokenize(stemmer.stem(sent)) for sent in st]
     #print("\nARRAY - TOKENIZING WORD SENTENCE")
     #print(arr)
 
-    n = 3
-    final_summ = []
-    for idx, sentence in enumerate(textrank(arr, n, stopwords)):
-        print("%s. %s" % ((idx + 1), ' '.join(sentence)))
-        text = ' '.join(sentence)
-        final_summ.append(text)
+    n = int(len(st) / 3) # jumlah kalimat yang akan dihasilkan
 
-    return ('.'.join(final_summ))
+    final_summ = []
+
+    summary = itemgetter(*textrank(arr, n, stopwords))(st)
+    for idx, sentence in enumerate(summary):
+        final_summ.append(sentence)
+
+    return (' '.join(final_summ))

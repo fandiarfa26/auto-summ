@@ -5,12 +5,21 @@
         {{ form.hidden_tag() }}
         <p>
             {{ form.sentence1.label }} <br>
-            {{ form.sentence1 }} <br>
+            {{ form.sentence1(rows='10',cols='100') }} <br>
             {% for error in form.sentence1.errors %}
             <span style="color:red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+
+    {% with result = get_flashed_messages() %}
+    {% if result %}
+    <h3>Result:</h3>
+    <p>
+        {{ result|join('') }}
+    </p>
+    {% endif %}
+    {% endwith %}
     
 {% endblock %}
