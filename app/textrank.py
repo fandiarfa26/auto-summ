@@ -4,6 +4,8 @@ from operator import itemgetter
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 import numpy as np
+import nltk
+nltk.download('punkt')
 
 def textrank(sentences, top_n, stopwords=None):
 
