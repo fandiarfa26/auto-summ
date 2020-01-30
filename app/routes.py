@@ -1,15 +1,17 @@
 from flask import render_template, flash, redirect, url_for
 from app import app
-from app.forms import SentenceForm
+from app.forms import FileUploadForm
 from app.textrank import process
+from app.extracting_text import extracting_text
 
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 def index():
     
-    form = SentenceForm()
+    form = FileUploadForm()
     if form.validate_on_submit():
-        s1 = form.sentence1.data
+        i_file = form.file.data
+        s1 = extracting_text(i_file)
         result = process(s1)
         flash(result)
         return redirect(url_for('index'))
