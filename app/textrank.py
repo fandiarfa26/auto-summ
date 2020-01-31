@@ -14,12 +14,12 @@ def textrank(sentences, top_n, stopwords=None):
 
     # mengurutkan ranking kalimat
     ranked_sentence_indexes = [item[0] for item in sorted(enumerate(sentence_ranking), key=lambda item: -item[1])]
-    print("\nRANKED SENTENCE INDEXES")
-    print(ranked_sentence_indexes)
+    # print("\nRANKED SENTENCE INDEXES")
+    # print(ranked_sentence_indexes)
 
     selected_sentences = sorted(ranked_sentence_indexes[:top_n])
-    print("\nSELECTED SENTENCES")
-    print(selected_sentences)
+    # print("\nSELECTED SENTENCES")
+    # print(selected_sentences)
 
     return selected_sentences
 
@@ -113,7 +113,7 @@ def process(req):
     final_summ = []
 
     summary = itemgetter(*textrank(arr, n, stopwords))(st)
-    for idx, sentence in enumerate(summary):
+    for sentence in summary:
         final_summ.append(sentence)
 
     return (' '.join(final_summ))

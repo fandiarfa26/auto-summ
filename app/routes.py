@@ -1,3 +1,4 @@
+import time
 from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import FileUploadForm
@@ -10,10 +11,13 @@ def index():
     
     form = FileUploadForm()
     if form.validate_on_submit():
+        start_time = time.time()
         i_file = form.file.data
         s1 = extracting_text(i_file)
         result = process(s1)
         flash(result)
+        finish_time = time.time() - start_time
+        print("--- Processing Time: %s seconds ---" % ("{0:.3f}".format(finish_time)))
         return redirect(url_for('index'))
     return render_template('index.html', form=form)
 
