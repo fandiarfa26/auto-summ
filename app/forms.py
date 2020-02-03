@@ -10,4 +10,4 @@ class SentenceForm(FlaskForm):
 
 class FileUploadForm(FlaskForm):
     file = FileField('Upload PDF Text Document', validators=[FileRequired()])
-    submit = SubmitField('Process')
+    

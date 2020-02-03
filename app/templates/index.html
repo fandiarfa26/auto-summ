@@ -1,23 +1,84 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="" method="POST" enctype="multipart/form-data" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.file.label }} <br>
-            {{ form.file }} <br>
-            
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <div class="card">
+        <div class="card-content">
+            <form action="" method="POST" enctype="multipart/form-data" novalidate>
+                {{ form.hidden_tag() }}
+        
+                <div>
+                    <h4 class="title is-4">{{ form.file.label }}</h4>
+                    
+                    <div style="padding: 0px 10px 20px 10px;">
+                        <div id="i-file" class="file has-name is-fullwidth">
+                            <label class="file-label">
+                              {{ form.file(class_="file-input") }}
+                              <span class="file-cta">
+                                <span class="file-icon">
+                                  <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                  Choose a file…
+                                </span>
+                              </span>
+                              <span class="file-name">
+                                <i>No file uploaded</i>
+                              </span>
+                            </label>
+                          </div>
+                    </div>
+                </div>
+                <button type="submit" id="btnSubmit" onclick="whenSubmit()" class="button is-primary">Process</button>
+            </form>
+        </div>
+    </div>
+    
 
     {% with result = get_flashed_messages() %}
     {% if result %}
-    <h3>Result:</h3>
-    <p>
-        {{ result|join('') }}
-    </p>
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-content">
+            <h4 class="title is-4">Result</h4>
+            <p id="resultText" class="has-text-justified">
+                {{ result|join('') }}
+            </p>
+        </div>
+        <footer class="card-footer">
+            <p class="card-footer-item">
+                <span>
+                    <button type="button" class="button is-info">
+                      <i class="fas fa-copy"></i> &nbsp; Copy to Clipboard
+                    </button>
+                </span>
+              </p>
+            <p class="card-footer-item">
+                <span>
+                  <button type="button" class="button is-danger">
+                    <i class="fas fa-file-export"></i> &nbsp; Export to PDF
+                  </button>
+                </span>
+            </p>
+          </footer>
+    </div>
+   
     {% endif %}
     {% endwith %}
+
+    <script>
+        const fileInput = document.querySelector('#i-file input[type=file]');
+            fileInput.onchange = () => {
+            if (fileInput.files.length > 0) {
+                const fileName = document.querySelector('#i-file .file-name');
+                fileName.textContent = fileInput.files[0].name;
+            }
+        }
+
+        function whenSubmit() {
+            const btnSubmit = document.getElementById('btnSubmit');
+            btnSubmit.classList.add('is-loading'); 
+            return false;
+        }
+        
+    </script>
     
 {% endblock %}
