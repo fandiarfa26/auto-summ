@@ -36,7 +36,7 @@
 
     {% with result = get_flashed_messages() %}
     {% if result %}
-    <div class="card" style="margin-top: 20px;">
+    <div class="card" style="margin: 20px 0;">
         <div class="card-content">
             <h4 class="title is-4">Result</h4>
             <p id="resultText" class="has-text-justified">
@@ -46,7 +46,7 @@
         <footer class="card-footer">
             <p class="card-footer-item">
                 <span>
-                    <button type="button" class="button is-info">
+                    <button type="button" class="button is-info" onclick="copyToClipboard()">
                       <i class="fas fa-copy"></i> &nbsp; Copy to Clipboard
                     </button>
                 </span>
@@ -64,6 +64,8 @@
     {% endif %}
     {% endwith %}
 
+    <div id="snackbar">Some text some message..</div>
+
     <script>
         const fileInput = document.querySelector('#i-file input[type=file]');
             fileInput.onchange = () => {
@@ -77,6 +79,28 @@
             const btnSubmit = document.getElementById('btnSubmit');
             btnSubmit.classList.add('is-loading'); 
             return false;
+        }
+
+        function copyToClipboard() {
+            var text = document.getElementById('resultText').innerText;
+            var elem = document.createElement("textarea");
+            document.body.appendChild(elem);
+            elem.value = text;
+            elem.select();
+            document.execCommand('copy');
+            document.body.removeChild(elem);
+
+            showSnackbar("Copied!");
+
+            return false;
+        }
+
+
+        function showSnackbar(msg) {
+          var x = document.getElementById("snackbar");
+          x.innerText = msg;
+          x.className = "show";
+          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
         }
         
     </script>
