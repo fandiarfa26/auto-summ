@@ -101,8 +101,8 @@ def process(req):
 
     # sentence splitting
     st = sent_tokenize(req)
-    # print("\nSENTENCE SPLITTING")
-    # print(st)
+    print("\nSENTENCE SPLITTING")
+    print(st)
 
     arr = [word_tokenize(stemmer.stem(sent)) for sent in st]
     #print("\nARRAY - TOKENIZING WORD SENTENCE")
