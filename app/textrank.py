@@ -5,6 +5,7 @@ from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 import numpy as np
 import nltk
+import math
 nltk.download('punkt')
 
 def textrank(sentences, top_n, stopwords=None):
@@ -108,7 +109,7 @@ def process(req):
     #print("\nARRAY - TOKENIZING WORD SENTENCE")
     #print(arr)
 
-    n = int(len(st) / 3) # jumlah kalimat yang akan dihasilkan
+    n = math.floor(len(st) / 4) # jumlah kalimat yang akan dihasilkan
 
     final_summ = []
 
