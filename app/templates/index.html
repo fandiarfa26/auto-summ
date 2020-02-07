@@ -46,11 +46,11 @@
     <div class="card" style="margin: 10px 0;">
       <div class="card-content">
         <p class="title">Choose a book:</p>
-        <form id="formSummarize" action="" method="POST">
+        <form id="formSummarize" action="/summarize" method="POST">
           {% for b in books %}
             <input type="radio" name="book" value="{{ b.path_file }}""> {{ b.title }} <br>
           {% endfor %}
-          <button type="button" id="btnSummarize" onclick="whenChoose()" class="button is-primary">Summarize</button>
+          <button type="submit" id="btnSummarize" onclick="whenChoose()" class="button is-primary">Summarize</button>
           <button type="button" id="showAddBook" class="button is-info modal-button" data-target="#myModal" aria-haspopup="true"><i class="fas fa-plus"></i><span>Add</span></button>
         </form>
         
@@ -121,6 +121,16 @@
         function whenChoose() {
           const btnSummarize = document.getElementById('btnSummarize');
           btnSummarize.classList.add('is-loading'); 
+
+          /*var path_file = $("input[name='book']:checked").val();
+
+          $.ajax({
+            url: "{{ url_for('summarize') }}",
+            type: "POST",
+            data: {'path_file': path_file},
+            success: function()
+          })*/
+
           return false;
         }
 

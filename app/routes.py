@@ -2,7 +2,7 @@ import time
 import os
 import uuid
 from flask import render_template, flash, redirect, url_for, request
-from config import UPLOAD_DIR
+from config import UPLOAD_DIR, basedir
 from app import app, db
 from app.forms import BookUploadForm
 from app.textrank import process
@@ -35,16 +35,19 @@ def index():
         print("Uploaded a new book!")
         return redirect(url_for('index'))
 
-    # if form.validate_on_submit():
-    #     start_time = time.time()
-    #     i_file = form.file.data
-    #     s1 = extracting_text(i_file)
-    #     result = process(s1)
-    #     flash(result)
-    #     finish_time = time.time() - start_time
-    #     print("--- Processing Time: %s seconds ---" % ("{0:.3f}".format(finish_time)))
-    #     return redirect(url_for('index'))
     return render_template('index.html', form=uploadForm, books=books)
+
+@app.route('/summarize', methods=['POST'])
+def summarize():
+    start_time = time.time()
+    i_file = open(os.path.join(basedir, request.form['book']), 'rb')
+    s1 = extracting_text(i_file)
+    result = process(s1)
+    flash(result)
+    finish_time = time.time() - start_time
+    print("--- Processing Time: %s seconds ---" % ("{0:.3f}".format(finish_time)))
+    return redirect(url_for('index'))
+    # return os.path.join(basedir, request.form['book'])
 
 
 @app.route('/help')
