@@ -4,7 +4,7 @@ from app import db
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    data_file = db.Column(db.LargeBinary)
+    path_file = db.Column(db.Text())
     summaries = db.relationship('Summary', backref='book', lazy='dynamic')
 
     def __repr__(self):

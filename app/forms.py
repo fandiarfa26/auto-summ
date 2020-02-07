@@ -8,6 +8,6 @@ class SentenceForm(FlaskForm):
     sentence1 = StringField('Sentences', widget=TextArea(), validators=[DataRequired()])
     submit = SubmitField('Process')
 
-class FileUploadForm(FlaskForm):
-    file = FileField('Upload PDF Text Document', validators=[FileRequired()])
-    
+class BookUploadForm(FlaskForm):
+    title = StringField('Book Title', validators=[DataRequired()])
+    file = FileField('File PDF', validators=[FileRequired()])

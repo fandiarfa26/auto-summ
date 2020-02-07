@@ -1,6 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_DIR = os.path.join(basedir, 'uploads/')
 
 class Config(object):
     
