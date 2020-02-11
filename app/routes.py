@@ -1,7 +1,7 @@
 import time
 import os
 import uuid
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, send_file
 from config import UPLOAD_DIR, basedir
 from app import app, db
 from app.forms import BookUploadForm
@@ -43,12 +43,12 @@ def summarize():
     i_file = open(os.path.join(basedir, request.form['book']), 'rb')
     s1 = extracting_text(i_file)
     result = process(s1)
+    flash(request.form['book'])
     flash(result)
     finish_time = time.time() - start_time
     print("--- Processing Time: %s seconds ---" % ("{0:.3f}".format(finish_time)))
     return redirect(url_for('index'))
     # return os.path.join(basedir, request.form['book'])
-
 
 @app.route('/help')
 def help():

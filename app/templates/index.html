@@ -61,30 +61,42 @@
 
     {% with result = get_flashed_messages() %}
     {% if result %}
-    <div class="card" style="margin: 10px 0;">
-        <div class="card-content">
-            <h4 class="title is-4">Result</h4>
-            <p id="resultText" class="has-text-justified">
-                {{ result|join('') }}
-            </p>
-        </div>
-        <footer class="card-footer">
-            <p class="card-footer-item">
-                <span>
-                    <button type="button" class="button is-info" onclick="copyToClipboard()">
-                      <i class="fas fa-copy"></i> &nbsp; Copy to Clipboard
-                    </button>
-                </span>
+    <div class="columns">
+      <div class="column is-two-fifths">
+            <embed src="/{{ result[0] }}" width="100%" height="300" />
+      </div>
+      <div class="column">
+        <div class="card" style="margin: 10px 0;">
+          <div class="card-content">
+              <h4 class="title is-4">Result</h4>
+              <p id="resultText" class="has-text-justified">
+                  {{ result[1]|join('') }}
               </p>
-            <!-- <p class="card-footer-item">
-                <span>
-                  <button type="button" class="button is-danger">
-                    <i class="fas fa-file-export"></i> &nbsp; Export to PDF
-                  </button>
-                </span>
-            </p> -->
-          </footer>
+          </div>
+          <footer class="card-footer">
+              <p class="card-footer-item">
+                  <span>
+                      <button type="button" class="button is-info" onclick="copyToClipboard()">
+                        <i class="fas fa-copy"></i> &nbsp; Copy to Clipboard
+                      </button>
+                  </span>
+                </p>
+              <!-- <p class="card-footer-item">
+                  <span>
+                    <button type="button" class="button is-danger">
+                      <i class="fas fa-file-export"></i> &nbsp; Export to PDF
+                    </button>
+                  </span>
+              </p> -->
+            </footer>
+      </div>
+      </div>
     </div>
+    
+    
+
+    
+    
    
     {% endif %}
     {% endwith %}
