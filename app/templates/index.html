@@ -20,7 +20,7 @@
                   <div style="padding: 0px 10px 20px 10px;">
                       <div id="i-file" class="file has-name is-fullwidth">
                           <label class="file-label">
-                            {{ form.file(class_="file-input") }}
+                            {{ form.file(class_="file-input", accept_=".pdf") }}
                             <span class="file-cta">
                               <span class="file-icon">
                                 <i class="fas fa-upload"></i>
@@ -98,7 +98,7 @@
           <footer class="card-footer">
               <p class="card-footer-item">
                   <span>
-                      <button type="button" class="button is-info" onclick="copyToClipboard()">
+                      <button type="button" class="button is-info is-small" onclick="copyToClipboard()">
                         <i class="fas fa-copy"></i> &nbsp; Copy to Clipboard
                       </button>
                   </span>
