@@ -7,7 +7,7 @@ from app import app, db
 from app.forms import BookUploadForm
 from app.textrank import process
 from app.extracting_text import extracting_text
-from app.models import Book
+from app.models import Book, Summary
 
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
@@ -40,15 +40,38 @@ def index():
 @app.route('/summarize', methods=['POST'])
 def summarize():
     start_time = time.time()
-    i_file = open(os.path.join(basedir, request.form['book']), 'rb')
-    s1 = extracting_text(i_file)
-    result = process(s1)
-    flash(request.form['book'])
+
+    id_book = request.form['book']
+
+    summ_book = Summary.query.filter_by(book_id=id_book).first()
+    the_book = Book.query.filter_by(id=id_book).first()
+
+    if summ_book is None:
+        the_book = Book.query.filter_by(id=id_book).first()
+
+        i_file = open(os.path.join(basedir, the_book.path_file), 'rb')
+        s1 = extracting_text(i_file)
+        result = process(s1)
+
+        newSumm = Summary(text=result, book_id=id_book)
+        db.session.add(newSumm)
+        db.session.commit()
+    else:
+        result = summ_book.text
+    
+    flash(the_book.path_file)
     flash(result)
     finish_time = time.time() - start_time
     print("--- Processing Time: %s seconds ---" % ("{0:.3f}".format(finish_time)))
     return redirect(url_for('index'))
     # return os.path.join(basedir, request.form['book'])
+
+@app.route('/uploads/<file>')
+def return_files_tut(file):
+	try:
+		return send_file(UPLOAD_DIR+file, attachment_filename=file)
+	except Exception as e:
+		return str(e)
 
 @app.route('/help')
 def help():

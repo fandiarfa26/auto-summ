@@ -109,7 +109,7 @@ def process(req):
     #print("\nARRAY - TOKENIZING WORD SENTENCE")
     #print(arr)
 
-    n = math.floor(len(st) / 4) # jumlah kalimat yang akan dihasilkan
+    n = math.floor((25/100) * len(st)) # jumlah kalimat yang akan dihasilkan
 
     final_summ = []
 
