@@ -11,8 +11,7 @@
   <title>Auto Summarization Textrank</title>
   {% endif %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf_viewer.css">
   <style>
 
     .radio-toolbar input[type="radio"] {
@@ -29,6 +28,7 @@
       font-family: sans-serif, Arial;
       font-size: 16px;
       cursor:pointer;
+      border-radius: 4px;
     }
 
     .radio-toolbar input[type="radio"]:checked + label {
@@ -87,7 +87,8 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.worker.min.js"></script>
 </head>
 
 <body>
@@ -127,27 +128,6 @@
       {% block content %}{% endblock %}
     </div>
   </main>
-
-  <script>
-    $(document).ready(function(){
-      $('.owl-carousel').owlCarousel({
-        
-        margin:10,
-        nav:true,
-        responsive:{
-            0:{
-                items:1
-            },
-            600:{
-                items:5
-            },
-            1000:{
-                items:7
-            }
-        }
-    })
-    });
-  </script>
 </body>
 
 </html>

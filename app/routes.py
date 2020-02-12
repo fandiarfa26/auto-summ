@@ -1,6 +1,7 @@
 import time
 import os
 import uuid
+import PyPDF2
 from flask import render_template, flash, redirect, url_for, request, send_file
 from config import UPLOAD_DIR, basedir
 from app import app, db
@@ -21,6 +22,12 @@ def index():
         i_title = uploadForm.title.data
         i_file = uploadForm.file.data
 
+        # create a pdf reader
+        pdfReader = PyPDF2.PdfFileReader(i_file)
+
+        # get total pdf page number
+        totalPageNumber = pdfReader.numPages
+
         ext = i_file.filename.split('.')[-1]
         filename = f'{uuid.uuid4()}.{ext}'
 
@@ -28,7 +35,7 @@ def index():
 
         i_file.save(path_file)
 
-        newBook = Book(title=i_title, path_file='uploads/'+filename)
+        newBook = Book(title=i_title, pages=totalPageNumber, path_file='uploads/'+filename)
         db.session.add(newBook)
         db.session.commit()
 
@@ -50,7 +57,22 @@ def summarize():
         the_book = Book.query.filter_by(id=id_book).first()
 
         i_file = open(os.path.join(basedir, the_book.path_file), 'rb')
-        s1 = extracting_text(i_file)
+
+        # create a pdf reader
+        pdfReader = PyPDF2.PdfFileReader(i_file)
+
+        # get total pdf page number
+        totalPageNumber = pdfReader.numPages
+        fulltext = ''
+
+        for p in range(0, totalPageNumber):
+            pageObj = pdfReader.getPage(p)
+            fulltext += pageObj.extractText()
+        
+        #print(fulltext)
+
+        s1 = fulltext.replace('\n', '').replace('  ',' ')
+
         result = process(s1)
 
         newSumm = Summary(text=result, book_id=id_book)
