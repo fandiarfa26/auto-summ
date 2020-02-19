@@ -14,8 +14,36 @@ from app.models import Book, Summary
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
 def index():
+    
+    uploadForm = BookUploadForm()
+
     books = Book.query.all()
-    return render_template('index.html', books=books)
+
+    if uploadForm.validate_on_submit():
+        i_title = uploadForm.title.data
+        i_file = uploadForm.file.data
+
+        # create a pdf reader
+        pdfReader = PyPDF2.PdfFileReader(i_file)
+
+        # get total pdf page number
+        totalPageNumber = pdfReader.numPages
+
+        ext = i_file.filename.split('.')[-1]
+        filename = secure_filename(i_file.filename)
+
+        path_file = UPLOAD_DIR + filename
+
+        i_file.save(path_file)
+
+        newBook = Book(title=i_title, pages=totalPageNumber, path_file='uploads/'+filename)
+        db.session.add(newBook)
+        db.session.commit()
+
+        print("Uploaded a new book!")
+        return redirect(url_for('index'))
+
+    return render_template('index.html', form=uploadForm, books=books)
 
 @app.route('/summarize', methods=['POST'])
 def summarize():

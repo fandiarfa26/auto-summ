@@ -5,7 +5,7 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     pages = db.Column(db.Integer())
-    path_file = db.Column(db.Text())
+    filename = db.Column(db.String(100))
     summaries = db.relationship('Summary', backref='book', lazy='dynamic')
 
     def __repr__(self):

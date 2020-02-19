@@ -1,22 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class="modal" id="myModal">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <div class="box">
+        <p class="title">Upload a New Book</p>
+          <form action="" method="POST" enctype="multipart/form-data" novalidate>
+              {{ form.hidden_tag() }}
+              <div>
+                <h5 class="title is-5">{{ form.title.label }}</h5>
+                <div style="padding: 0px 10px 20px 10px;">
+                  {{ form.title(class_="input") }}
+                </div>
+              </div>
+              <div>
+                  <h5 class="title is-5">{{ form.file.label }}</h5>
+                  
+                  <div style="padding: 0px 10px 20px 10px;">
+                      <div id="i-file" class="file has-name is-fullwidth">
+                          <label class="file-label">
+                            {{ form.file(class_="file-input") }}
+                            <span class="file-cta">
+                              <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                              </span>
+                              <span class="file-label">
+                                Choose a file…
+                              </span>
+                            </span>
+                            <span class="file-name">
+                              <i>No file uploaded</i>
+                            </span>
+                          </label>
+                        </div>
+                  </div>
+              </div>
+              <button type="submit" id="btnSubmit" onclick="whenSubmit()" class="button is-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close"></button>
+    </div>
 
-  <form id="formSummarize" action="/summarize" method="POST"></form>
     <div class="card" style="margin: 10px 0;">
       <div class="card-content">
         <div class="columns">
           <div class="column is-one-fifth">
             <figure class="image is-fullwidth">
-              <img src="/uploads/preview.png" id="image-cover" style="border: 1px solid black">
+              <img src="/uploads/preview.png">
             </figure>
-            <button type="submit" id="btnSummarize" onclick="whenSummarize()" class="button is-primary is-fullwidth" style="margin-top: 5px; display: none;">Summarize</button>
+            <button type="submit" id="btnSummarize" onclick="whenChoose()" class="button is-primary is-fullwidth" style="margin-top: 5px; display: none;">Summarize</button>
             
             <!-- <button type="button" id="showAddBook" class="button is-info modal-button" data-target="#myModal" aria-haspopup="true"><i class="fas fa-plus"></i><span>Add</span></button> -->
           </div>
           <div class="column">
             <h4 class="title is-4">Choose a book</h4>
-            
+            <form id="formSummarize" action="/summarize" method="POST">
               <div class="radio-toolbar">
                 <table class="table is-fullwidth">
                   <thead>
@@ -27,12 +67,12 @@
                   </thead>
                   <tbody>
                       {% for b in books %}
-                      <tr id="tr{{ b.filename }}" class="tr-book">
+                      <tr>
                         <td>{{ b.id }}</td>
                         <td>{{ b.title }}</td>
                         <td>{{ b.pages }}</td>
                         <td>
-                          <input type="radio" id="book{{ b.id }}" name="book" value="{{ b.id }}" onclick="changeCover('{{ b.filename }}')">
+                          <input type="radio" id="book{{ b.id }}" name="book" value="{{ b.id }}">
                           <label for="book{{ b.id }}">Choose</label>
                         </td>
                         
@@ -43,13 +83,13 @@
               </div>
               <br>
               
-            
+            </form>
           </div>
         </div>
         
       </div>
     </div>
-  </form>
+
     
 
     {% with result = get_flashed_messages() %}
@@ -103,13 +143,17 @@
             }
         }
 
-        function changeCover(filename) {
-          $('#image-cover').attr('src','/uploads/'+filename+'.png');
-          $('.tr-book').css("background-color", "white");
-          $('#tr'+filename).css("background-color", "#BBFFBB");
-          $('#btnSummarize').show();
-          return false;
-        }
+        document.querySelectorAll('.modal-button').forEach(function(el) {
+          el.addEventListener('click', function() {
+            var target = document.querySelector(el.getAttribute('data-target'));
+            
+            target.classList.add('is-active');
+            
+            target.querySelector('.modal-close').addEventListener('click',   function() {
+                target.classList.remove('is-active');
+             });
+          });
+        });
 
         function whenSubmit() {
             const btnSubmit = document.getElementById('btnSubmit');
@@ -117,9 +161,18 @@
             return false;
         }
 
-        function whenSummarize() {
+        function whenChoose() {
           const btnSummarize = document.getElementById('btnSummarize');
           btnSummarize.classList.add('is-loading'); 
+
+          /*var path_file = $("input[name='book']:checked").val();
+
+          $.ajax({
+            url: "{{ url_for('summarize') }}",
+            type: "POST",
+            data: {'path_file': path_file},
+            success: function()
+          })*/
 
           return false;
         }
