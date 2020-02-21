@@ -2,146 +2,107 @@
 
 {% block content %}
 
-  <form id="formSummarize" action="/summarize" method="POST"></form>
-    <div class="card" style="margin: 10px 0;">
-      <div class="card-content">
-        <div class="columns">
-          <div class="column is-one-fifth">
-            <figure class="image is-fullwidth">
-              <img src="/uploads/preview.png" id="image-cover" style="border: 1px solid black">
-            </figure>
-            <button type="submit" id="btnSummarize" onclick="whenSummarize()" class="button is-primary is-fullwidth" style="margin-top: 5px; display: none;">Summarize</button>
-            
-            <!-- <button type="button" id="showAddBook" class="button is-info modal-button" data-target="#myModal" aria-haspopup="true"><i class="fas fa-plus"></i><span>Add</span></button> -->
+  <form id="formSummarize" action="#" method="POST">
+  <div class="row">
+    <div class="col-sm-12 col-md-3">
+      <figure>
+        <img src="/images/covers/preview.png" id="image-cover" style="border: 1px solid black" class="img-fluid" alt="Responsive image">
+      </figure>
+      <button type="button" id="btnSummarize" onclick="whenSummarize()" class="btn btn-info btn-block" style="margin-top: 5px; display: none;">Summarize</button>
+    </div>
+    <div class="col-sm">
+      <h4>Choose a book: </h4>
+      <div class="accordion radio-toolbar div-choose" id="accordionExample">
+        {% for b in books %}
+        <div>
+          <div id="heading{{ b.id }}">
+            <div class="mb-0">
+              <button class="btn btn-link" type="button" onclick="changeCover('{{ b.code }}')" data-toggle="collapse" data-target="#collapse{{ b.id }}" aria-expanded="false" aria-controls="collapse{{ b.id }}">
+                {{ b.title }}
+              </button>
+            </div>
           </div>
-          <div class="column">
-            <h4 class="title is-4">Choose a book</h4>
-            
-              <div class="radio-toolbar">
-                <table class="table is-fullwidth">
-                  <thead>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Pages</th>
-                    <th></th>
-                  </thead>
-                  <tbody>
-                      {% for b in books %}
-                      <tr id="tr{{ b.filename }}" class="tr-book">
-                        <td>{{ b.id }}</td>
-                        <td>{{ b.title }}</td>
-                        <td>{{ b.pages }}</td>
-                        <td>
-                          <input type="radio" id="book{{ b.id }}" name="book" value="{{ b.id }}" onclick="changeCover('{{ b.filename }}')">
-                          <label for="book{{ b.id }}">Choose</label>
-                        </td>
-                        
-                      </tr>
-                      {% endfor %}
-                  </tbody>
-                </table>
+      
+          <div id="collapse{{ b.id }}" class="collapse" aria-labelledby="heading{{ b.id }}" data-parent="#accordionExample">
+            <div class="ml-5">
+              {% for ch in b.chapters %}
+              <div>
+                <input type="radio" id="radio{{ ch.id }}" value="{{ ch.id }}" name="book" onclick="chooseChapter()">
+                <label for="radio{{ ch.id }}">{{ ch.title }}</label>
               </div>
-              <br>
-              
-            
+              {% endfor %}
+            </div>
           </div>
         </div>
-        
+        {% endfor %}
       </div>
     </div>
+  </div>
   </form>
-    
+  
+  <hr>
 
-    {% with result = get_flashed_messages() %}
-    {% if result %}
-    <div class="columns">
-      <div class="column">
-            <embed src="/uploads/{{ result[0] }}.pdf" width="100%" height="500" />
-      </div>
-      <div class="column">
-        <div class="card" style="margin: 10px 0;">
-          <div class="card-content">
-              <h4 class="title is-4">Result</h4>
-              <div class="control">
-                <textarea class="textarea" id="resultText" readonly rows="15">{{ result[1]|join('') }}</textarea>
-              </div>
-              <p id="resultText" class="has-text-justified">
-                  
-              </p>
-          </div>
-          <footer class="card-footer">
-              <p class="card-footer-item">
-                  <span>
-                      <button type="button" class="button is-info is-small" onclick="copyToClipboard()">
-                        <i class="fas fa-copy"></i> &nbsp; Copy to Clipboard
-                      </button>
-                  </span>
-                </p>
-              <!-- <p class="card-footer-item">
-                  <span>
-                    <button type="button" class="button is-danger">
-                      <i class="fas fa-file-export"></i> &nbsp; Export to PDF
-                    </button>
-                  </span>
-              </p> -->
-            </footer>
-      </div>
-      </div>
+  <div class="row no-gap">
+    <div class="col-md">
+      <embed src="/uploads/IFDnTcMUfw/kJYx78i3w2_ori.pdf" width="100%" height="600" style="border: 1px solid black" />
     </div>
-    
-    {% endif %}
-    {% endwith %}
+    <div class="col-md">
 
-    <div id="snackbar">Some text some message..</div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Keywords</h5>
+          <p class="card-text">
+            <ol>
+              <li>Keyword1</li>
+              <li>Keyword2</li>
+              <li>Keyword3</li>
+              <li>Keyword4</li>
+              <li>Keyword5</li>
+            </ol>
+          </p>
+        </div>
+      </div>
+      
+      <div class="card mt-2">
+        <div class="card-body">
+          <h5 class="card-title">Summary</h5>
+          <!-- <h6 class="card-subtitle mb-2 text-muted">lorem ipsum</h6> -->
+          <p class="card-text">
+            <textarea class="form-control" id="" cols="30" rows="10" readonly style="background-color: white;"></textarea>
+          </p>
+          <button type="button" class="btn btn-info btn-sm"><i class="fas fa-copy"></i> &nbsp; Copy to Clipboard</button>
+        </div>
+      </div>
 
-    <script>
-        const fileInput = document.querySelector('#i-file input[type=file]');
-            fileInput.onchange = () => {
-            if (fileInput.files.length > 0) {
-                const fileName = document.querySelector('#i-file .file-name');
-                fileName.textContent = fileInput.files[0].name;
-            }
-        }
+      
 
-        function changeCover(filename) {
-          $('#image-cover').attr('src','/uploads/'+filename+'.png');
-          $('.tr-book').css("background-color", "white");
-          $('#tr'+filename).css("background-color", "#BBFFBB");
-          $('#btnSummarize').show();
-          return false;
-        }
+    </div>
+  </div>
 
-        function whenSubmit() {
-            const btnSubmit = document.getElementById('btnSubmit');
-            btnSubmit.classList.add('is-loading'); 
-            return false;
-        }
 
-        function whenSummarize() {
-          const btnSummarize = document.getElementById('btnSummarize');
-          btnSummarize.classList.add('is-loading'); 
+  <script>
 
-          return false;
-        }
+    function changeCover(code) {
+      $('#image-cover').attr('src','/images/covers/'+code+'.png');
+      return false;
+    }
 
-        function copyToClipboard() {
-            var elem = document.getElementById('resultText');
-            
-            elem.select();
-            document.execCommand('copy');
+    function chooseChapter() {
+      $('#btnSummarize').show();
+      return false;
+    }
 
-            showSnackbar("Copied!");
+    function whenSummarize() {
+      var chapter_id = $("input[name='book']:checked"). val();
+      
+      /*$.ajax({
+        method: "POST",
+        url: "/summarize"
+      });*/
+      return false;
+    }
 
-            return false;
-        }
 
-        function showSnackbar(msg) {
-          var x = document.getElementById("snackbar");
-          x.innerText = msg;
-          x.className = "show";
-          setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-        }
-        
-    </script>
+  </script>
     
 {% endblock %}

@@ -3,20 +3,20 @@ from app import db
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(100))
     title = db.Column(db.String(100))
-    cover = db.Column(db.String(100))
-    chapters = db.relationship('Chapter', backref='book', lazy='dynamic')
+    chapters = db.relationship('Chapter')
 
     def __repr__(self):
         return '<Book ID:{}>'.format(self.id)
 
 class Chapter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(100))
     title = db.Column(db.String(100))
     pages = db.Column(db.Integer())
-    filename = db.Column(db.String(100))
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
-    summaries = db.relationship('Summary', backref='chapter', lazy='dynamic')
+    summaries = db.relationship('Summary')
 
     def __repr__(self):
         return '<Chapter ID:{}>'.format(self.id)
