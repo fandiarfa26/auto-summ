@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  {% if title %}
+  <title>{{ title }} - Auto Summarization Textrank</title>
+  {% else %}
+  <title>Auto Summarization Textrank</title>
+  {% endif %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf_viewer.css">
+  <style>
+
+    .radio-toolbar input[type="radio"] {
+      opacity: 0;
+      position: fixed;
+      width: 0;
+    }
+
+    .radio-toolbar label {
+      text-align: center;
+      display: block;
+      background-color: #ddd;
+      padding: 5px 20px;
+      font-family: sans-serif, Arial;
+      font-size: 16px;
+      cursor:pointer;
+      border-radius: 4px;
+    }
+
+    .radio-toolbar input[type="radio"]:checked + label {
+      background-color:#bfb;
+      border-color: #4c4;
+    }
+
+    .radio-toolbar label:hover {
+      background-color: #dfd;
+    }
+
+    #snackbar {
+      visibility: hidden;
+      min-width: 250px;
+      margin-left: -125px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+    }
+    
+    #snackbar.show {
+      visibility: visible;
+      -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    
+    @-webkit-keyframes fadein {
+      from {bottom: 0; opacity: 0;} 
+      to {bottom: 30px; opacity: 1;}
+    }
+    
+    @keyframes fadein {
+      from {bottom: 0; opacity: 0;}
+      to {bottom: 30px; opacity: 1;}
+    }
+    
+    @-webkit-keyframes fadeout {
+      from {bottom: 30px; opacity: 1;} 
+      to {bottom: 0; opacity: 0;}
+    }
+    
+    @keyframes fadeout {
+      from {bottom: 30px; opacity: 1;}
+      to {bottom: 0; opacity: 0;}
+    }
+    </style>
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.worker.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="#!">
+          <strong>Auto-Summarization Textrank</strong>
+        </a>
+
+        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+          data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="{{ url_for('index') }}">
+            Home
+          </a>
+          <a class="navbar-item" href="{{ url_for('help') }}">
+            Help
+          </a>
+          <a class="navbar-item" href="{{ url_for('about') }}">
+            About
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main style="margin-top: 20px;">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</body>
+
+</html>

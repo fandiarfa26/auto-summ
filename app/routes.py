@@ -4,7 +4,7 @@ import uuid
 import PyPDF2
 from flask import render_template, flash, redirect, url_for, request, send_file
 from werkzeug.utils import secure_filename
-from config import UPLOAD_DIR, basedir
+from config import UPLOAD_DIR, IMAGE_DIR, basedir
 from app import app, db
 from app.forms import BookUploadForm
 from app.textrank import process
@@ -61,10 +61,17 @@ def summarize():
     return redirect(url_for('index'))
     # return os.path.join(basedir, request.form['book'])
 
-@app.route('/uploads/<file>')
-def return_files_tut(file):
+@app.route('/images/covers/<file>')
+def return_cover(file):
 	try:
-		return send_file(UPLOAD_DIR+file, attachment_filename=file)
+		return send_file(IMAGE_DIR+"covers/"+file, attachment_filename=file)
+	except Exception as e:
+		return str(e)
+
+@app.route('/uploads/<book>/<file>')
+def return_book(book, file):
+	try:
+		return send_file(UPLOAD_DIR+book+"/"+file, attachment_filename=file)
 	except Exception as e:
 		return str(e)
 
