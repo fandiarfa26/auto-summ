@@ -8,8 +8,8 @@ from config import UPLOAD_DIR, IMAGE_DIR, basedir
 from app import app, db
 from app.forms import BookUploadForm
 from app.textrank import process
-from app.models import Book, Summary
-
+from app.extract_keywords import extract_keywords
+from app.models import Book, Chapter, Summary
 
 @app.route('/', methods=['GET','POST'])
 @app.route('/index', methods=['GET','POST'])
@@ -17,49 +17,60 @@ def index():
     books = Book.query.all()
     return render_template('index.html', books=books)
 
-@app.route('/summarize', methods=['POST'])
-def summarize():
+@app.route('/result', methods=['POST'])
+def result():
     start_time = time.time()
+    print('Get Processing...')
 
-    id_book = request.form['book']
+    ch_id = request.form['book']
 
-    summ_book = Summary.query.filter_by(book_id=id_book).first()
-    the_book = Book.query.filter_by(id=id_book).first()
+    summ_book = Summary.query.filter_by(chapter_id=ch_id).first()
+    the_chapter = Chapter.query.filter_by(id=ch_id).first()
+    the_book = Book.query.filter_by(id=the_chapter.book_id).first()
 
-    if summ_book is None:
-        the_book = Book.query.filter_by(id=id_book).first()
-
-        i_file = open(os.path.join(basedir, the_book.path_file), 'rb')
-
-        # create a pdf reader
-        pdfReader = PyPDF2.PdfFileReader(i_file)
-
-        # get total pdf page number
-        totalPageNumber = pdfReader.numPages
-        fulltext = ''
-
-        for p in range(0, totalPageNumber):
-            pageObj = pdfReader.getPage(p)
-            fulltext += pageObj.extractText()
-        
-        #print(fulltext)
-
-        s1 = fulltext.replace('\n', '').replace('  ',' ')
-
-        result = process(s1)
-
-        newSumm = Summary(text=result, book_id=id_book)
-        db.session.add(newSumm)
-        db.session.commit()
-    else:
-        result = summ_book.text
+    ### UNTUK PERCOBAAN ###
+    p = "Di dunia bisnis, multimedia digunakan sebagai media profil perusahaan, profil produk, bahkan sebagai media kios informasi dan pelatihan dalam sistem e-learning."
+    result = extract_keywords(p)
+    ### 
     
-    flash(the_book.path_file)
-    flash(result)
+    # if summ_book is None:
+    #     print('Extracting Text from PDF...')
+    #     i_file = open(os.path.join(UPLOAD_DIR, the_book.code + "/" + the_chapter.code + ".pdf"), 'rb')
+
+    #     # create a pdf reader
+    #     pdfReader = PyPDF2.PdfFileReader(i_file)
+
+    #     # get total pdf page number
+    #     totalPageNumber = pdfReader.numPages
+    #     fulltext = ''
+
+    #     for p in range(0, totalPageNumber):
+    #         pageObj = pdfReader.getPage(p)
+    #         fulltext += pageObj.extractText()
+        
+    #     #print(fulltext)
+
+    #     s1 = fulltext.replace('\n', '').replace('  ',' ')
+
+    #     print('Summarizing...')
+    #     result = process(s1)
+
+    #     newSumm = Summary(text=result, chapter_id=ch_id)
+    #     db.session.add(newSumm)
+    #     db.session.commit()
+    # else:
+    #     result = summ_book.text
+    
     finish_time = time.time() - start_time
+    
+    print('Done.')
     print("--- Processing Time: %s seconds ---" % ("{0:.3f}".format(finish_time)))
-    return redirect(url_for('index'))
-    # return os.path.join(basedir, request.form['book'])
+    
+    chapter_ori_path = the_book.code + "/" + the_chapter.code + "_ori.pdf"
+    
+
+    return render_template('result.html', ch_path=chapter_ori_path, summary=result)
+
 
 @app.route('/images/covers/<file>')
 def return_cover(file):

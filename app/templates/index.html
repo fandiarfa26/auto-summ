@@ -2,13 +2,13 @@
 
 {% block content %}
 
-  <form id="formSummarize" action="#" method="POST">
+  <form id="formSummarize" action="{{ url_for('result') }}" method="POST">
   <div class="row">
     <div class="col-sm-12 col-md-3">
       <figure>
         <img src="/images/covers/preview.png" id="image-cover" style="border: 1px solid black" class="img-fluid" alt="Responsive image">
       </figure>
-      <button type="button" id="btnSummarize" onclick="whenSummarize()" class="btn btn-info btn-block" style="margin-top: 5px; display: none;">Summarize</button>
+      <button type="submit" id="btnSummarize" onclick="whenSummarize()" class="btn btn-info btn-block" style="margin-top: 5px; display: none;">Summarize</button>
     </div>
     <div class="col-sm">
       <h4>Choose a book: </h4>
@@ -40,44 +40,8 @@
   </div>
   </form>
   
-  <hr>
 
-  <div class="row no-gap">
-    <div class="col-md">
-      <embed src="/uploads/IFDnTcMUfw/kJYx78i3w2_ori.pdf" width="100%" height="600" style="border: 1px solid black" />
-    </div>
-    <div class="col-md">
-
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Keywords</h5>
-          <p class="card-text">
-            <ol>
-              <li>Keyword1</li>
-              <li>Keyword2</li>
-              <li>Keyword3</li>
-              <li>Keyword4</li>
-              <li>Keyword5</li>
-            </ol>
-          </p>
-        </div>
-      </div>
-      
-      <div class="card mt-2">
-        <div class="card-body">
-          <h5 class="card-title">Summary</h5>
-          <!-- <h6 class="card-subtitle mb-2 text-muted">lorem ipsum</h6> -->
-          <p class="card-text">
-            <textarea class="form-control" id="" cols="30" rows="10" readonly style="background-color: white;"></textarea>
-          </p>
-          <button type="button" class="btn btn-info btn-sm"><i class="fas fa-copy"></i> &nbsp; Copy to Clipboard</button>
-        </div>
-      </div>
-
-      
-
-    </div>
-  </div>
+  
 
 
   <script>
@@ -92,17 +56,5 @@
       return false;
     }
 
-    function whenSummarize() {
-      var chapter_id = $("input[name='book']:checked"). val();
-      
-      /*$.ajax({
-        method: "POST",
-        url: "/summarize"
-      });*/
-      return false;
-    }
-
-
   </script>
-    
 {% endblock %}
